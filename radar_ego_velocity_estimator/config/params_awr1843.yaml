@@ -3,7 +3,7 @@ radar_ego_velocity_estimation_ros_node:
     ## radar ego velocity estimation
     # filtering
     min_dist: 0.25                        # min distance of valid detection
-    max_dist: 100.0                       # Max distance of valid detection
+    max_dist: 20.0                       # Max distance of valid detection
     min_db: 5.0                           # min SNR in [db]
     elevation_thresh_deg: 60.0            # threshold for elevation [deg]
     azimuth_thresh_deg: 60.0              # threshold fo azimuth [deg]

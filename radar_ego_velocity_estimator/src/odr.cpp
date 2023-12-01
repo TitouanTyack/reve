@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-#include <radar_ego_velocity_estimator/odr.h>
+#include <radar_ego_velocity_estimator/odr.hpp>
 
 // inspired by scipy's odrpack c-wrapper https://github.com/scipy/scipy/blob/master/scipy/odr/__odrpack.c
 // big thanks to Robert Kern!!

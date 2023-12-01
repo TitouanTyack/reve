@@ -23,8 +23,9 @@
 #include <chrono>
 #include <numeric>
 #include <yaml-cpp/yaml.h>
+#include <iomanip>
 
-#include <ros/console.h>
+// #include <ros/console.h>
 
 namespace reve
 {

@@ -11,7 +11,7 @@ import time
 
 import matplotlib.pyplot as plt
 
-import rospy
+import rclpy
 from geometry_msgs.msg import TwistWithCovarianceStamped, TwistStamped
 
 
@@ -23,6 +23,7 @@ class VelocityEstimationEvaluator:
         self.list_v_gt = []
         self.lock = threading.Lock()
         self.velocity_type = velocity_type
+        rclpy.create_publisher(TwistWithCovarianceStamped, topic_radar_velocity, self.callback_v_body, 10)
 
         self.sub_v_body = rospy.Subscriber(topic_radar_velocity, TwistWithCovarianceStamped, self.callback_v_body, queue_size=10)
         self.sub_v_ground_truth = rospy.Subscriber(topic_velocity_gt, TwistStamped, self.callback_v_ground_truth, queue_size=10)

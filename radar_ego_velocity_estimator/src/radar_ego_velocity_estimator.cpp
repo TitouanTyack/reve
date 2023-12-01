@@ -16,13 +16,14 @@
 
 #define PCL_NO_PRECOMPILE
 
+#include <rclcpp/logger.hpp>
 #include <random>
 #include <algorithm>
 
 #include <angles/angles.h>
 
-#include <radar_ego_velocity_estimator/odr.h>
-#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator.h>
+#include <radar_ego_velocity_estimator/odr.hpp>
+#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator.hpp>
 
 using namespace reve;
 
@@ -49,21 +50,21 @@ static RadarPointCloudType toRadarPointCloudType(const Vector11& item, const Rad
   return point;
 }
 
-bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                                          Vector3& v_r,
                                          Vector3& sigma_v_r)
 {
   Matrix3 P_v_r;
-  sensor_msgs::PointCloud2 inlier_radar_msg;
+  sensor_msgs::msg::PointCloud2 inlier_radar_msg;
   const auto success = estimate(radar_scan_msg, v_r, P_v_r, inlier_radar_msg);
   sigma_v_r          = Vector3(P_v_r(0, 0), P_v_r(1, 1), P_v_r(2, 2)).array().sqrt();
   return success;
 }
 
-bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                                          Vector3& v_r,
                                          Vector3& sigma_v_r,
-                                         sensor_msgs::PointCloud2& inlier_radar_msg)
+                                         sensor_msgs::msg::PointCloud2& inlier_radar_msg)
 {
   Matrix3 P_v_r;
   pcl::PointCloud<RadarPointCloudType> radar_scan_inlier;
@@ -76,16 +77,16 @@ bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_s
   return success;
 }
 
-bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_scan_msg, Vector3& v_r, Matrix3& P_v_r)
+bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg, Vector3& v_r, Matrix3& P_v_r)
 {
-  sensor_msgs::PointCloud2 inlier_radar_msg;
+  sensor_msgs::msg::PointCloud2 inlier_radar_msg;
   return estimate(radar_scan_msg, v_r, P_v_r, inlier_radar_msg);
 }
 
-bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                                          Vector3& v_r,
                                          Matrix3& P_v_r,
-                                         sensor_msgs::PointCloud2& inlier_radar_msg)
+                                         sensor_msgs::msg::PointCloud2& inlier_radar_msg)
 {
   pcl::PointCloud<RadarPointCloudType> radar_scan_inlier;
   bool success = estimate(radar_scan_msg, v_r, P_v_r, radar_scan_inlier);
@@ -96,7 +97,7 @@ bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_s
   return success;
 }
 
-bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                                          Vector3& v_r,
                                          Matrix3& P_v_r,
                                          pcl::PointCloud<RadarPointCloudType>& radar_scan_inlier,
@@ -145,7 +146,23 @@ bool RadarEgoVelocityEstimator::estimate(const sensor_msgs::PointCloud2& radar_s
 
       if (median < config_.thresh_zero_velocity)
       {
-        ROS_INFO_STREAM_THROTTLE(0.5, kPrefix << "Zero velocity detected!");
+        // RCLCPP_INFO(rclcpp::get_logger("radar_ego_velocity_estimation_ros_node"),
+        //             "config_.thresh_zero_velocity : %f",
+        //             config_.thresh_zero_velocity);
+        // ROS_INFO_STREAM_THROTTLE(0.5, kPrefix << "Zero velocity detected!");
+        if(timestamp_)
+        {
+          if(std::chrono::steady_clock::now() - *timestamp_ > std::chrono::seconds(1)){
+            RCLCPP_INFO(rclcpp::get_logger("radar_ego_velocity_estimation_ros_node"), "Zero velocity detected!");
+            timestamp_ = std::make_unique<std::chrono::steady_clock::time_point>(std::chrono::steady_clock::now());
+          }
+        }
+        else
+        {
+          RCLCPP_INFO(rclcpp::get_logger("radar_ego_velocity_estimation_ros_node"), "Zero velocity detected!");
+          timestamp_ = std::make_unique<std::chrono::steady_clock::time_point>(std::chrono::steady_clock::now());
+        }
+          
 
         v_r = Vector3(0, 0, 0);
         P_v_r.setIdentity();
@@ -218,7 +235,7 @@ bool RadarEgoVelocityEstimator::solve3DLsqRansac(const Matrix& radar_data,
 
   std::random_device rd;
   std::mt19937 g(rd());
-
+  
   if (radar_data.rows() >= config_.N_ransac_points)
   {
     for (uint k = 0; k < ransac_iter_; ++k)
@@ -349,4 +366,45 @@ bool RadarEgoVelocityEstimator::solve3DOdr(const Matrix& radar_data, Vector3& v_
   }
 
   return false;
+}
+
+void RadarEgoVelocityEstimator::configure(RadarEgoVelocityEstimatorConfig& config)
+{
+  config_ = config;
+
+  setRansacIter();
+
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("min_dist"), config.min_dist);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("max_dist"), config.max_dist);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("min_db"), config.min_db);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("elevation_thresh_deg"), config.elevation_thresh_deg);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("azimuth_thresh_deg"), config.azimuth_thresh_deg);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("filter_min_z"), config.filter_min_z);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("filter_max_z"), config.filter_max_z);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("doppler_velocity_correction_factor"), config.doppler_velocity_correction_factor);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("thresh_zero_velocity"), config.thresh_zero_velocity);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("allowed_outlier_percentage"), config.allowed_outlier_percentage);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_zero_velocity_x"), config.sigma_zero_velocity_x);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_zero_velocity_y"), config.sigma_zero_velocity_y);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_zero_velocity_z"), config.sigma_zero_velocity_z);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_offset_radar_x"), config.sigma_offset_radar_x);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_offset_radar_y"), config.sigma_offset_radar_y);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_offset_radar_z"), config.sigma_offset_radar_z);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("max_sigma_x"), config.max_sigma_x);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("max_sigma_y"), config.max_sigma_y);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("max_sigma_z"), config.max_sigma_z);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("max_r_cond"), config.max_r_cond);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("use_cholesky_instead_of_bdcsvd"), config.use_cholesky_instead_of_bdcsvd);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("use_ransac"), config.use_ransac);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("outlier_prob"), config.outlier_prob);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("success_prob"), config.success_prob);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("N_ransac_points"), config.N_ransac_points);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("inlier_thresh"), config.inlier_thresh);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("use_odr"), config.use_odr);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("sigma_v_d"), config.sigma_v_d);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("min_speed_odr"), config.min_speed_odr);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("model_noise_offset_deg"), config.model_noise_offset_deg);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("model_noise_scale_deg"), config.model_noise_scale_deg);
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("ransac_iter"), ransac_iter_);
+  
 }

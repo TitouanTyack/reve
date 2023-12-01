@@ -16,20 +16,24 @@
 
 #pragma once
 
-#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/pcl_macros.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-#include <pcl_ros/transforms.h>
+#include <pcl_ros/transforms.hpp>
 
-#include <radar_ego_velocity_estimator/data_types.h>
-#include <radar_ego_velocity_estimator/radar_point_cloud.h>
-#include <radar_ego_velocity_estimator/ros_helper.h>
+#include <radar_ego_velocity_estimator/data_types.hpp>
+#include <radar_ego_velocity_estimator/radar_point_cloud.hpp>
+#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator_config_ros.hpp>
 
-#include <radar_ego_velocity_estimator/RadarEgoVelocityEstimatorConfig.h>
+#include <chrono>
+
+// #include <radar_ego_velocity_estimator/ros_helper.hpp>
+
+// #include <radar_ego_velocity_estimator/RadarEgoVelocityEstimatorConfig.h>
 
 namespace reve
 {
@@ -57,15 +61,13 @@ public:
    * @brief RadarEgoVelocityEstimator constructor
    */
   RadarEgoVelocityEstimator() {}
-
+  
   /**
    * @brief Reconfigure callback
    * @param config  has to contain RadarEgoVelocityEstimatorConfig
    * @return
    */
-  template <class ConfigContainingRadarEgoVelocityEstimatorConfig>
-  bool configure(ConfigContainingRadarEgoVelocityEstimatorConfig& config);
-
+  void configure(RadarEgoVelocityEstimatorConfig& config);
   /**
    * @brief Estimates the radar ego velocity based on a single radar scan
    * @param[in] radar_scan_msg       radar scan
@@ -74,17 +76,17 @@ public:
    * @param[out] inlier_radar_scan   inlier point cloud
    * @returns true if estimation successful
    */
-  bool estimate(const sensor_msgs::PointCloud2& radar_scan_msg, Vector3& v_r, Matrix3& P_v_r);
-  bool estimate(const sensor_msgs::PointCloud2& radar_scan_msg, Vector3& v_r, Vector3& sigma_v_r);
-  bool estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+  bool estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg, Vector3& v_r, Matrix3& P_v_r);
+  bool estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg, Vector3& v_r, Vector3& sigma_v_r);
+  bool estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                 Vector3& v_r,
                 Matrix3& P_v_r,
-                sensor_msgs::PointCloud2& inlier_radar_msg);
-  bool estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+                sensor_msgs::msg::PointCloud2& inlier_radar_msg);
+  bool estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                 Vector3& v_r,
                 Vector3& sigma_v_r,
-                sensor_msgs::PointCloud2& inlier_radar_msg);
-  bool estimate(const sensor_msgs::PointCloud2& radar_scan_msg,
+                sensor_msgs::msg::PointCloud2& inlier_radar_msg);
+  bool estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg,
                 Vector3& v_r,
                 Matrix3& P_v_r,
                 pcl::PointCloud<RadarPointCloudType>& inlier_radar,
@@ -127,54 +129,9 @@ private:
   const std::string kPrefix = "[RadarEgoVelocityEstimator]: ";
   const RadarEgoVelocityEstimatorIndices idx_;
 
-  radar_ego_velocity_estimation::RadarEgoVelocityEstimatorConfig config_;
+  RadarEgoVelocityEstimatorConfig config_;
   uint ransac_iter_ = 0;
+
+  std::unique_ptr<std::chrono::steady_clock::time_point> timestamp_;
 };
-
-template <class ConfigContainingRadarEgoVelocityEstimatorConfig>
-bool RadarEgoVelocityEstimator::configure(ConfigContainingRadarEgoVelocityEstimatorConfig& config)
-{
-  config_.min_dist                           = config.min_dist;
-  config_.max_dist                           = config.max_dist;
-  config_.min_db                             = config.min_db;
-  config_.elevation_thresh_deg               = config.elevation_thresh_deg;
-  config_.azimuth_thresh_deg                 = config.azimuth_thresh_deg;
-  config_.filter_min_z                       = config.filter_min_z;
-  config_.filter_max_z                       = config.filter_max_z;
-  config_.doppler_velocity_correction_factor = config.doppler_velocity_correction_factor;
-
-  config_.thresh_zero_velocity       = config.thresh_zero_velocity;
-  config_.allowed_outlier_percentage = config.allowed_outlier_percentage;
-  config_.sigma_zero_velocity_x      = config.sigma_zero_velocity_x;
-  config_.sigma_zero_velocity_y      = config.sigma_zero_velocity_y;
-  config_.sigma_zero_velocity_z      = config.sigma_zero_velocity_z;
-
-  config_.sigma_offset_radar_x = config.sigma_offset_radar_x;
-  config_.sigma_offset_radar_y = config.sigma_offset_radar_y;
-  config_.sigma_offset_radar_z = config.sigma_offset_radar_z;
-
-  config_.max_sigma_x                    = config.max_sigma_x;
-  config_.max_sigma_y                    = config.max_sigma_y;
-  config_.max_sigma_z                    = config.max_sigma_z;
-  config_.max_r_cond                     = config.max_r_cond;
-  config_.use_cholesky_instead_of_bdcsvd = config.use_cholesky_instead_of_bdcsvd;
-
-  config_.use_ransac      = config.use_ransac;
-  config_.outlier_prob    = config.outlier_prob;
-  config_.success_prob    = config.success_prob;
-  config_.N_ransac_points = config.N_ransac_points;
-  config_.inlier_thresh   = config.inlier_thresh;
-
-  config_.use_odr   = config.use_odr;
-  config_.sigma_v_d = config.sigma_v_d;
-  config_.min_speed_odr = config.min_speed_odr;
-  config_.model_noise_offset_deg = config.model_noise_offset_deg;
-  config_.model_noise_scale_deg = config.model_noise_scale_deg;
-
-  setRansacIter();
-
-  ROS_INFO_STREAM(kPrefix << "Number of Ransac iterations: " << ransac_iter_);
-
-  return true;
-}
 }  // namespace reve

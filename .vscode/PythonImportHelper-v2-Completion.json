@@ -1,0 +1,252 @@
+[
+    {
+        "label": "*",
+        "importPath": "dynamic_reconfigure.parameter_generator_catkin",
+        "description": "dynamic_reconfigure.parameter_generator_catkin",
+        "isExtraImport": true,
+        "detail": "dynamic_reconfigure.parameter_generator_catkin",
+        "documentation": {}
+    },
+    {
+        "label": "arguments",
+        "importPath": "ast",
+        "description": "ast",
+        "isExtraImport": true,
+        "detail": "ast",
+        "documentation": {}
+    },
+    {
+        "label": "executable",
+        "importPath": "http.server",
+        "description": "http.server",
+        "isExtraImport": true,
+        "detail": "http.server",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "get_package_share_directory",
+        "importPath": "ament_index_python",
+        "description": "ament_index_python",
+        "isExtraImport": true,
+        "detail": "ament_index_python",
+        "documentation": {}
+    },
+    {
+        "label": "FindPackageShare",
+        "importPath": "launch_ros.substitutions",
+        "description": "launch_ros.substitutions",
+        "isExtraImport": true,
+        "detail": "launch_ros.substitutions",
+        "documentation": {}
+    },
+    {
+        "label": "LaunchDescription",
+        "importPath": "launch",
+        "description": "launch",
+        "isExtraImport": true,
+        "detail": "launch",
+        "documentation": {}
+    },
+    {
+        "label": "DeclareLaunchArgument",
+        "importPath": "launch.actions",
+        "description": "launch.actions",
+        "isExtraImport": true,
+        "detail": "launch.actions",
+        "documentation": {}
+    },
+    {
+        "label": "IncludeLaunchDescription",
+        "importPath": "launch.actions",
+        "description": "launch.actions",
+        "isExtraImport": true,
+        "detail": "launch.actions",
+        "documentation": {}
+    },
+    {
+        "label": "GroupAction",
+        "importPath": "launch.actions",
+        "description": "launch.actions",
+        "isExtraImport": true,
+        "detail": "launch.actions",
+        "documentation": {}
+    },
+    {
+        "label": "PythonLaunchDescriptionSource",
+        "importPath": "launch.launch_description_sources",
+        "description": "launch.launch_description_sources",
+        "isExtraImport": true,
+        "detail": "launch.launch_description_sources",
+        "documentation": {}
+    },
+    {
+        "label": "LaunchConfiguration",
+        "importPath": "launch.substitutions",
+        "description": "launch.substitutions",
+        "isExtraImport": true,
+        "detail": "launch.substitutions",
+        "documentation": {}
+    },
+    {
+        "label": "PathJoinSubstitution",
+        "importPath": "launch.substitutions",
+        "description": "launch.substitutions",
+        "isExtraImport": true,
+        "detail": "launch.substitutions",
+        "documentation": {}
+    },
+    {
+        "label": "TextSubstitution",
+        "importPath": "launch.substitutions",
+        "description": "launch.substitutions",
+        "isExtraImport": true,
+        "detail": "launch.substitutions",
+        "documentation": {}
+    },
+    {
+        "label": "Node",
+        "importPath": "launch_ros.actions",
+        "description": "launch_ros.actions",
+        "isExtraImport": true,
+        "detail": "launch_ros.actions",
+        "documentation": {}
+    },
+    {
+        "label": "PushRosNamespace",
+        "importPath": "launch_ros.actions",
+        "description": "launch_ros.actions",
+        "isExtraImport": true,
+        "detail": "launch_ros.actions",
+        "documentation": {}
+    },
+    {
+        "label": "ComposableNodeContainer",
+        "importPath": "launch_ros.actions",
+        "description": "launch_ros.actions",
+        "isExtraImport": true,
+        "detail": "launch_ros.actions",
+        "documentation": {}
+    },
+    {
+        "label": "ComposableNode",
+        "importPath": "launch_ros.descriptions",
+        "description": "launch_ros.descriptions",
+        "isExtraImport": true,
+        "detail": "launch_ros.descriptions",
+        "documentation": {}
+    },
+    {
+        "label": "with_statement",
+        "importPath": "__future__",
+        "description": "__future__",
+        "isExtraImport": true,
+        "detail": "__future__",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "rclpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "rclpy",
+        "description": "rclpy",
+        "detail": "rclpy",
+        "documentation": {}
+    },
+    {
+        "label": "TwistWithCovarianceStamped",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "TwistStamped",
+        "importPath": "geometry_msgs.msg",
+        "description": "geometry_msgs.msg",
+        "isExtraImport": true,
+        "detail": "geometry_msgs.msg",
+        "documentation": {}
+    },
+    {
+        "label": "configure",
+        "kind": 2,
+        "importPath": "radar_ego_velocity_estimator.cfg.cfg_radar_ego_velocity_estimation.radar_ego_velocity_estimator",
+        "description": "radar_ego_velocity_estimator.cfg.cfg_radar_ego_velocity_estimation.radar_ego_velocity_estimator",
+        "peekOfCode": "def configure(gen):\n    radar_refiner = gen.add_group(\"Radar Ego Velocity Estimator\")\n    radar_refiner.add(\"min_dist\", double_t, 0, \"Min distance of targets\", 0.25, 0, 100)\n    radar_refiner.add(\"max_dist\", double_t, 0, \"Max distance of targets\", 100, 0, 1000)\n    radar_refiner.add(\"min_db\", double_t, 0, \"Min dB of targets\", 5, 0, 50)\n    radar_refiner.add(\"elevation_thresh_deg\", double_t, 0, \"Absolute elevation angle threshold\", 60, 0, 100)\n    radar_refiner.add(\"azimuth_thresh_deg\", double_t, 0, \"Absolute azimuth angle threshold\", 60, 0, 100)\n    radar_refiner.add(\"filter_min_z\", double_t, 0, \"\", -100, -1000, 1000)\n    radar_refiner.add(\"filter_max_z\", double_t, 0, \"\", 100, -1000, 1000)\n    radar_refiner.add(\"doppler_velocity_correction_factor\", double_t, 0, \"Correction factor of Doppler velocity measurements\", 1.0, 0, 2)",
+        "detail": "radar_ego_velocity_estimator.cfg.cfg_radar_ego_velocity_estimation.radar_ego_velocity_estimator",
+        "documentation": {}
+    },
+    {
+        "label": "PACKAGE",
+        "kind": 5,
+        "importPath": "radar_ego_velocity_estimator.cfg.cfg_radar_ego_velocity_estimation.radar_ego_velocity_estimator",
+        "description": "radar_ego_velocity_estimator.cfg.cfg_radar_ego_velocity_estimation.radar_ego_velocity_estimator",
+        "peekOfCode": "PACKAGE = \"radar_ego_velocity_estimation\"\nfrom dynamic_reconfigure.parameter_generator_catkin import *\ndef configure(gen):\n    radar_refiner = gen.add_group(\"Radar Ego Velocity Estimator\")\n    radar_refiner.add(\"min_dist\", double_t, 0, \"Min distance of targets\", 0.25, 0, 100)\n    radar_refiner.add(\"max_dist\", double_t, 0, \"Max distance of targets\", 100, 0, 1000)\n    radar_refiner.add(\"min_db\", double_t, 0, \"Min dB of targets\", 5, 0, 50)\n    radar_refiner.add(\"elevation_thresh_deg\", double_t, 0, \"Absolute elevation angle threshold\", 60, 0, 100)\n    radar_refiner.add(\"azimuth_thresh_deg\", double_t, 0, \"Absolute azimuth angle threshold\", 60, 0, 100)\n    radar_refiner.add(\"filter_min_z\", double_t, 0, \"\", -100, -1000, 1000)",
+        "detail": "radar_ego_velocity_estimator.cfg.cfg_radar_ego_velocity_estimation.radar_ego_velocity_estimator",
+        "documentation": {}
+    },
+    {
+        "label": "generate_launch_description",
+        "kind": 2,
+        "importPath": "radar_ego_velocity_estimator.launch.demo_ti_mmwave_ego_velocity.launch",
+        "description": "radar_ego_velocity_estimator.launch.demo_ti_mmwave_ego_velocity.launch",
+        "peekOfCode": "def generate_launch_description():\n    config = os.path.join(\n        get_package_share_directory('radar_ego_velocity_estimator'),\n        'config',\n        'params_demo_dataset.yaml'\n        )\n    radar_ego_velocity_estimator = Node(\n            package='radar_ego_velocity_estimator',\n            executable='radar_ego_velocity_estimation_ros_node',\n            name='radar_ego_velocity_estimation_ros_node',",
+        "detail": "radar_ego_velocity_estimator.launch.demo_ti_mmwave_ego_velocity.launch",
+        "documentation": {}
+    },
+    {
+        "label": "VelocityEstimationEvaluator",
+        "kind": 6,
+        "importPath": "radar_ego_velocity_estimator.python.velocity_estimation_evaluator",
+        "description": "radar_ego_velocity_estimator.python.velocity_estimation_evaluator",
+        "peekOfCode": "class VelocityEstimationEvaluator:\n    def __init__(self, topic_radar_velocity, velocity_type, topic_velocity_gt):\n        self.last_sub_walltime = None\n        self.list_v_b = []\n        self.list_v_gt = []\n        self.lock = threading.Lock()\n        self.velocity_type = velocity_type\n        rclpy.create_publisher(TwistWithCovarianceStamped, topic_radar_velocity, self.callback_v_body, 10)\n        self.sub_v_body = rospy.Subscriber(topic_radar_velocity, TwistWithCovarianceStamped, self.callback_v_body, queue_size=10)\n        self.sub_v_ground_truth = rospy.Subscriber(topic_velocity_gt, TwistStamped, self.callback_v_ground_truth, queue_size=10)",
+        "detail": "radar_ego_velocity_estimator.python.velocity_estimation_evaluator",
+        "documentation": {}
+    }
+]

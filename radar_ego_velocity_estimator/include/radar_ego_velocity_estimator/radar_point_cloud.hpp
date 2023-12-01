@@ -21,7 +21,7 @@
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
 
-#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 
 namespace reve
 {
@@ -50,8 +50,8 @@ struct mmWaveCloudType
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
-bool pcl2msgToPcl(const sensor_msgs::PointCloud2& pcl_msg, pcl::PointCloud<RadarPointCloudType>& scan);
+bool pcl2msgToPcl(const sensor_msgs::msg::PointCloud2& pcl_msg, pcl::PointCloud<RadarPointCloudType>& scan);
 
-bool pclToPcl2msg(pcl::PointCloud<RadarPointCloudType> scan, sensor_msgs::PointCloud2& pcl_msg);
+bool pclToPcl2msg(pcl::PointCloud<RadarPointCloudType> scan, sensor_msgs::msg::PointCloud2& pcl_msg);
 
 }  // namespace reve

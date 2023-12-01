@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 
-#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator_ros.h>
+#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator_ros.hpp>
 
 using namespace reve;
 
@@ -25,12 +25,9 @@ const std::string kPrefix   = "[" + kNodeName + "]: ";
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, kNodeName);
-  ros::NodeHandle nh("~");
-
-  RadarEgoVelocityEstimatorRos estimator_ros(nh);
-
-  ros::spin();
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<reve::RadarEgoVelocityEstimatorRos>());
+  rclcpp::shutdown();
 
   return 0;
 }

@@ -18,11 +18,11 @@
 #pragma once
 
 #include <angles/angles.h>
-#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 
-#include <radar_ego_velocity_estimator/data_types.h>
+#include <radar_ego_velocity_estimator/data_types.hpp>
 
-#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator.h>
+#include <radar_ego_velocity_estimator/radar_ego_velocity_estimator.hpp>
 
 namespace reve
 {
@@ -36,9 +36,9 @@ public:
 
   /**
    * @brief RadarBodyVelocityEstimator constructor
-   * @param[in] nh   Node handle
+   * @param[in] node   Node handle
    */
-  RadarBodyVelocityEstimator(ros::NodeHandle nh, const bool load_param_without_reconfigure = false);
+  RadarBodyVelocityEstimator(rclcpp::Node node, const bool load_param_without_reconfigure = false);
 
   /**
    * @brief Estimates the body velocity based on the radar scan and angular velocity
@@ -48,14 +48,14 @@ public:
    * @param[out] P_v_b           estimated covariance matrix
    * @returns true if estimation successful
    */
-  bool estimate(const sensor_msgs::PointCloud2& radar_scan_msg, const Vector3& w_b, Vector3& v_b_r, Matrix3& P_v_b);
+  bool estimate(const sensor_msgs::msg::PointCloud2& radar_scan_msg, const Vector3& w_b, Vector3& v_b_r, Matrix3& P_v_b);
 
   /**
    * @brief Recofigure callback
    * @param[in/out] cfg  cfg has to contain the members of RadarEgoVelocityEstimatorConfig
    */
   template <class ConfigContainingRadarEgoVelocityEstimatorConfig>
-  void configure(ConfigContainingRadarEgoVelocityEstimatorConfig& cfg)
+  void configure(RadarEgoVelocityEstimatorConfig& cfg)
   {
     radar_ego_velocity_estimator_.configure(cfg);
   }

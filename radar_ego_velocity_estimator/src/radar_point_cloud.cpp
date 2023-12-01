@@ -15,7 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <set>
-#include <radar_ego_velocity_estimator/radar_point_cloud.h>
+#include <radar_ego_velocity_estimator/radar_point_cloud.hpp>
+#include <rclcpp/logger.hpp>
 
 using namespace reve;
 
@@ -38,7 +39,7 @@ POINT_CLOUD_REGISTER_POINT_STRUCT (mmWaveCloudType,
                                     (float, velocity, velocity))
 // clang-format on
 
-bool reve::pcl2msgToPcl(const sensor_msgs::PointCloud2& pcl_msg, pcl::PointCloud<RadarPointCloudType>& scan)
+bool reve::pcl2msgToPcl(const sensor_msgs::msg::PointCloud2& pcl_msg, pcl::PointCloud<RadarPointCloudType>& scan)
 {
   // TODO: add support for ti_mmwave_rospkg clound type
 
@@ -55,7 +56,7 @@ bool reve::pcl2msgToPcl(const sensor_msgs::PointCloud2& pcl_msg, pcl::PointCloud
       fields.find("snr_db") != fields.end() && fields.find("noise_db") != fields.end() &&
       fields.find("v_doppler_mps") != fields.end())
   {
-    ROS_INFO_ONCE("[pcl2msgToPcl]: Detected rio pcl format!");
+    // ROS_INFO_ONCE("[pcl2msgToPcl]: Detected rio pcl format!");
     pcl::PCLPointCloud2 pcl_pc2;
     pcl_conversions::toPCL(pcl_msg, pcl_pc2);
     pcl::fromPCLPointCloud2(pcl_pc2, scan);
@@ -68,7 +69,7 @@ bool reve::pcl2msgToPcl(const sensor_msgs::PointCloud2& pcl_msg, pcl::PointCloud
   else if (fields.find("x") != fields.end() && fields.find("y") != fields.end() && fields.find("z") != fields.end() &&
            fields.find("intensity") != fields.end() && fields.find("velocity") != fields.end())
   {
-    ROS_INFO_ONCE("[pcl2msgToPcl]: Detected ti_mmwave_rospkg pcl format!");
+    // ROS_INFO_ONCE("[pcl2msgToPcl]: Detected ti_mmwave_rospkg pcl format!");
 
     pcl::PointCloud<mmWaveCloudType> scan_mmwave;
     pcl::PCLPointCloud2 pcl_pc2;
@@ -92,13 +93,13 @@ bool reve::pcl2msgToPcl(const sensor_msgs::PointCloud2& pcl_msg, pcl::PointCloud
   }
   else
   {
-    ROS_ERROR_STREAM(
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("pcl_logger"),
         "[pcl2msgToPcl]: Unsupported point cloud with fields: " << fields_str.substr(0, fields_str.size() - 2));
     return false;
   }
 }
 
-bool reve::pclToPcl2msg(pcl::PointCloud<RadarPointCloudType> scan, sensor_msgs::PointCloud2& pcl_msg)
+bool reve::pclToPcl2msg(pcl::PointCloud<RadarPointCloudType> scan, sensor_msgs::msg::PointCloud2& pcl_msg)
 {
   scan.height = 1;
   scan.width  = scan.size();

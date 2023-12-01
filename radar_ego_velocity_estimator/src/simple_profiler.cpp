@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "radar_ego_velocity_estimator/simple_profiler.h"
+#include "radar_ego_velocity_estimator/simple_profiler.hpp"
 
 using namespace reve;
 
@@ -42,7 +42,8 @@ bool SimpleProfiler::stop(const std::string& key)
   auto start = start_times_[key];
   if (start.time_since_epoch().count() == 0)
   {
-    ROS_ERROR_STREAM(kPrefix << key << " is ended but has been started.");
+    // ROS_ERROR_STREAM(kPrefix << key << " is ended but has been started.");
+    
     return false;
   }
   else
@@ -66,7 +67,7 @@ RuntimeStatistics SimpleProfiler::getStatistics(const std::string& key)
 
   if (data == profile_data_.end())
   {
-    ROS_ERROR_STREAM(kPrefix << key << " has not been profiled.");
+    // ROS_ERROR_STREAM(kPrefix << key << " has not been profiled.");
     return RuntimeStatistics();
   }
 
@@ -139,7 +140,7 @@ RuntimeStatistics SimpleProfiler::calculateProfileStatistics(const std::string& 
 
   if (data == profile_data_.end())
   {
-    ROS_ERROR_STREAM(kPrefix << key << " has not been profiled.");
+    // ROS_ERROR_STREAM(kPrefix << key << " has not been profiled.");
     return RuntimeStatistics();
   }
   else

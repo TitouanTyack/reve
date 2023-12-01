@@ -17,7 +17,7 @@
 #pragma once
 
 #include <Eigen/Dense>
-#include <radar_ego_velocity_estimator/data_types.h>
+#include <radar_ego_velocity_estimator/data_types.hpp>
 
 namespace reve
 {

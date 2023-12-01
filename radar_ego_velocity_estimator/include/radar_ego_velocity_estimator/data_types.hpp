@@ -18,12 +18,11 @@
 
 #include <angles/angles.h>
 #include <eigen3/Eigen/Dense>
-#include <ros/time.h>
-#include <sensor_msgs/Imu.h>
+#include <sensor_msgs/msg/imu.hpp>
 
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <tf2/LinearMath/Quaternion.h>
-#include <tf2_eigen/tf2_eigen.h>
+#include <tf2_eigen/tf2_eigen.hpp>
 
 namespace reve
 {
@@ -57,7 +56,7 @@ struct ImuData
 struct ImuDataStamped
 {
   ImuDataStamped() : dt{0} {}
-  ImuDataStamped(const ros::Time& time_stamp,
+  ImuDataStamped(const rclcpp::Time& time_stamp,
                  const std::string frame_id,
                  const double dt,
                  const Vector3& a_b_ib,
@@ -70,7 +69,7 @@ struct ImuDataStamped
   {
   }
 
-  ImuDataStamped(const sensor_msgs::ImuConstPtr& imu_msg, const Real dt) :
+  ImuDataStamped(const sensor_msgs::msg::Imu::ConstSharedPtr& imu_msg, const Real dt) :
     time_stamp{imu_msg->header.stamp},
     frame_id{imu_msg->header.frame_id},
     dt{dt},
@@ -79,9 +78,9 @@ struct ImuDataStamped
   {
   }
 
-  sensor_msgs::Imu toImuMsg()
+  sensor_msgs::msg::Imu toImuMsg()
   {
-    sensor_msgs::Imu imu_msg;
+    sensor_msgs::msg::Imu imu_msg;
     imu_msg.header.stamp          = time_stamp;
     imu_msg.angular_velocity.x    = w_b_ib.x();
     imu_msg.angular_velocity.y    = w_b_ib.y();
@@ -92,7 +91,7 @@ struct ImuDataStamped
     return imu_msg;
   }
 
-  ros::Time time_stamp;  // ros::Time
+  rclcpp::Time time_stamp;  // ros::Time
   std::string frame_id;  // frame id
   Real dt;               // [s]
   Vector3 a_b_ib;        // [m/s^2]
